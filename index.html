@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Quiz sobre tortugas usando Vue.js.">
+    <meta name="keywords" content="quiz, tortugas, Vue, JavaScript">
+    <meta name="author" content="Nayrelis Rumbos">
+    <title>Quiz de Tortugas</title>
+    
+    <!-- Enlace de Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+    
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <main id="app" class="cajaPrincipal">
+        
+        <section v-if="!iniciado">
+            <h1>qué tanto sabes de tortugas? 🐢</h1>
+            <p>Demuestra cuánto sabes sobre estos hermosos animales.</p>
+            <button @click="iniciado = true">Empezar</button>
+        </section>
+
+        <section v-else-if="indice < preguntas.length">
+            <h2>Pregunta {{ indice + 1 }} de {{ preguntas.length }}</h2>
+            <p class="pregunta">{{ preguntas[indice].pregunta }}</p>
+
+            <button v-for="opcion in preguntas[indice].opciones" 
+                    @click="responder(opcion)"
+                    :class="{ 
+                        'verde': seleccion === opcion && opcion === preguntas[indice].correcta,
+                        'rojo': seleccion === opcion && opcion !== preguntas[indice].correcta 
+                    }">
+                {{ opcion }}
+            </button>
+
+            <div v-if="seleccion !== ''" class="feedback">
+                <p v-if="seleccion === preguntas[indice].correcta">¡Correcto! 🐢💚</p>
+                <p v-else class="error">Incorrecto. La respuesta era: {{ preguntas[indice].correcta }}</p>
+                <button @click="siguiente" class="botonSiguiente">Siguiente</button>
+            </div>
+        </section>
+
+        <section v-else>
+            <h1>¡Terminaste!</h1>
+            <p>Tu puntaje es: {{ puntaje }} de {{ preguntas.length }}</p>
+            <button @click="reiniciar">Jugar otra vez</button>
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
